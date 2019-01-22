@@ -1,5 +1,8 @@
 var express = require('express');
+var {sequelize} = require('./models');
+
 var app = express();
+sequelize.sync();
 
 app.get('/', function (req, res) {
   res.send('Hello World!');
