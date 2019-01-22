@@ -1,8 +1,15 @@
 var express = require('express');
-var {sequelize} = require('./models');
+const bodyParser = require('body-parser');
+var { sequelize } = require('./models');
 
 var app = express();
+
+var userRouter = require('./routes/user');
 sequelize.sync();
+
+app.use(bodyParser());
+
+app.use('/users', userRouter);
 
 app.get('/', function (req, res) {
   res.send('Hello World!');
