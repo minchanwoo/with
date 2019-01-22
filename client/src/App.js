@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import axios from 'axios';
+
 class App extends Component {
   state = {
     name: '',
@@ -9,7 +11,15 @@ class App extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state);
+    
+    const body = {
+      name: this.state.name,
+      nick: this.state.nick,
+      password: this.state.password
+    };
+
+    axios.post('http://localhost:4000/users/join', body)
+      .then((result) => console.log(result));
   }
 
   handleInput = (e) => {
