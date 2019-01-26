@@ -17,6 +17,7 @@ class App extends Component {
       nick: this.state.nick,
       password: this.state.password,
       email: this.state.email,
+      password_confirm: this.state.password_confirm,
     };
 
     axios.post('http://localhost:4000/users/join', body)
@@ -58,6 +59,13 @@ class App extends Component {
             type='password'
             name='password'
             placeholder='비밀번호'
+            onInput={this.handleInput}
+          />
+          <br/>
+          <input
+            type='password'
+            name='password_confirm'
+            placeholder='비밀번호 확인'
             onInput={this.handleInput}
           />
           <br/>

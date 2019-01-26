@@ -5,7 +5,8 @@ const { User } = require('../models');
 const router = express.Router();
 
 router.post('/join', async (req, res, next) => {
-	const { name, nick, password, email } = req.body;
+	const { name, nick, password, password_confirm, email } = req.body;
+	
 	try {
 		const exUser = await User.find({ where:{ email: email } });
 		
