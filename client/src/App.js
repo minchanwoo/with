@@ -15,7 +15,8 @@ class App extends Component {
     const body = {
       name: this.state.name,
       nick: this.state.nick,
-      password: this.state.password
+      password: this.state.password,
+      email: this.state.email,
     };
 
     axios.post('http://localhost:4000/users/join', body)
@@ -38,18 +39,28 @@ class App extends Component {
             placeholder='이름'
             onInput={this.handleInput}
           />
+          <br/>
+          <input
+            type='email'
+            name='email'
+            placeholder='이메일'
+            onInput={this.handleInput}
+          />
+          <br/>
           <input
             type='text'
             name='nick'
             placeholder='닉네임'
             onInput={this.handleInput}
           />
+          <br/>
           <input
             type='password'
             name='password'
             placeholder='비밀번호'
             onInput={this.handleInput}
           />
+          <br/>
           <button type='submit'>회원가입</button>
         </form>
       </div>

@@ -5,9 +5,9 @@ const { User } = require('../models');
 const router = express.Router();
 
 router.post('/join', async (req, res, next) => {
-	const { name, nick, password } = req.body;
+	const { name, nick, password, email } = req.body;
 	try {
-		const exUser = await User.find({ where:{ name: name } });
+		const exUser = await User.find({ where:{ email: email } });
 		
 		if (exUser) {
 			return;
@@ -16,6 +16,7 @@ router.post('/join', async (req, res, next) => {
 		var result = await User.create({
 			name,
 			nick,
+			email,
 			password: hash,            
 		});
 		return result;
