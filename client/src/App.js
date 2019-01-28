@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import axios from 'axios';
 
-class App extends Component {
+class Join extends Component {
   state = {
     name: '',
     nick: '',
@@ -105,6 +105,18 @@ class App extends Component {
         </form>
       </div>
     );
+  }
+}
+
+class App extends Component {
+  render() {
+    return (
+      <Router>
+        <div>
+          <Route path="/join" component={Join} />
+        </div>
+      </Router>
+    )
   }
 }
 
