@@ -45,4 +45,25 @@ router.post('/join', async (req, res, next) => {
 	}
 });
 
+router.post('/login', async(req, res) => {
+	const { email, password } = req.body;
+	try {
+		const userByEmail = await User.find({ where: { email: email }});
+		if (!userByEmail) {
+			throw new Error('사용자가 없습니다.')
+		}
+		const compare = bcrypt.compareSync(password, userByEmail.password);
+		if (!compare) {
+			throw new Error('비밀번호가 틀렸습니다.');
+		}
+		res.send({
+			name: userByEmail.name,
+			email: userByEmail.email,
+			nick: userByEmail.nick,
+		})
+	} catch(error) {
+		res.status(500).send({errorMessage: error.message});
+	}
+})
+
 module.exports = router;
