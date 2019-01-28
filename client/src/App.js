@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
+import Home from './pages/Home';
 import Join from './pages/Join';
 import Login from './pages/Login';
 import MyPage from './pages/MyPage';
@@ -11,6 +12,7 @@ class App extends Component {
     return (
       <Router>
         <div>
+          <Route path="/" exact component={Home} />
           <Route path="/join" component={Join} />
           <Route path="/login" component={Login} />
           <Route path="/mypage" component={MyPage} />
