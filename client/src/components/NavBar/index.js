@@ -16,21 +16,27 @@ class CustomMenu extends Component {
 }
 
 class NavBar extends Component {
-	state = {
-		menues: [
-			{to: '/', name:'Home', exact: true},
-			{to: '/login', name:'Login'},
-			{to: '/mypage', name:'MyPage'},
-			{to: '/join', name:'Join'},
-			{to: '/logout', name:'Logout'},
-		]
-	}
 	render() {
 		const pathname = this.props.location.pathname;
+		const menues = (this.props.loggedInUser.email) 
+			? [ {to: '/', name: 'Home', exact: true}, {to: '/mypage', name: 'MyPage'}, {to: '/logout', name: 'Logout'} ]
+			: [ {to: '/', name: 'Home', exact: true}, {to: '/login', name: 'Login'}, {to: '/join', name: 'Join'} ]
 		return (
 			<Menu fixed='top' inverted>
 				<Container>
-					{this.state.menues.map((menu, i) => <CustomMenu key={i} to={menu.to} name={menu.name} pathname={pathname} />)}
+					{menues.map((menu, i) => (
+						<CustomMenu 
+							key={i} 
+							to={menu.to} 
+							name={menu.name} 
+							pathname={pathname} />
+						))}
+					<Menu.Item>
+						{this.props.loggedInUser.name 
+							? `${this.props.loggedInUser.name}님 안녕하세요.` 
+							: '회원가입 해주세요.'
+						}
+					</Menu.Item>
 				</Container>
 			</Menu>
 		)
