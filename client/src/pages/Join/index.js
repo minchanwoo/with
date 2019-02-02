@@ -11,6 +11,7 @@ class Join extends Component {
 		nick: '',
 		password: '',
 		errorMessage: '',
+		email: ''
 	}
 
 	handleSubmit = async (e) => {
@@ -26,7 +27,8 @@ class Join extends Component {
 
 		try {
 			bodyValidator(body);
-			await axios.post('http://localhost:4000/users/join', body)
+			await axios.post('http://localhost:4000/users/join', body);
+			this.props.history.push('/login');
 		} catch (catchedError) {
 			const errorMessage = (catchedError.response && catchedError.response.data) 
 				? catchedError.response.data.errorMessage

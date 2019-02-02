@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Router, Route } from 'react-router-dom';
+
+import createBrowserHistory from "history/createBrowserHistory";
 
 import 'semantic-ui-css/semantic.min.css'
 
@@ -11,10 +13,12 @@ import Login from './pages/Login';
 import MyPage from './pages/MyPage';
 import Logout from './pages/Logout';
 
+const history = createBrowserHistory()
+
 class App extends Component {
   render() {
     return (
-      <Router>
+      <Router history={history}>
         <div>
           <NavBar />
           <div style={{marginTop: '60px'}}>
