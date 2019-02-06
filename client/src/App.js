@@ -11,7 +11,6 @@ import Home from './pages/Home';
 import Join from './pages/Join';
 import Login from './pages/Login';
 import MyPage from './pages/MyPage';
-import Logout from './pages/Logout';
 
 const history = createBrowserHistory()
 
@@ -26,7 +25,6 @@ class App extends Component {
             <Route path="/join" component={Join} />
             <Route path="/login" component={Login} />
             <Route path="/mypage" component={MyPage} />
-            <Route path="/logout" component={Logout} />
           </div>
         </div>
       </Router>
