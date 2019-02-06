@@ -8,6 +8,16 @@ router.get('/info', (req, res) => {
 	res.send({ user: req.session.user });
 });
 
+router.get('/mypage', async (req, res) => {
+	if (req.session.user && req.session.user.id) {
+		const user = await User.find({ where: { id: req.session.user.id } });
+		user.password = undefined;
+		res.send({ user });
+	} else {
+		res.send({ user: null });
+	}
+})
+
 router.post('/join', async (req, res, next) => {
 	const { name, nick, password, password_confirm, email } = req.body;
 
@@ -63,7 +73,8 @@ router.post('/login', async(req, res) => {
 		res.status(200).send('ok');
 		req.session.user = {
 			name: userByEmail.name,
-			email: userByEmail.email
+			email: userByEmail.email,
+			id: userByEmail.id
 		};
 		req.session.save();
 	} catch(error) {
