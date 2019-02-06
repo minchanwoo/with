@@ -56,11 +56,12 @@ router.post('/login', async(req, res) => {
 		if (!compare) {
 			throw new Error('비밀번호가 틀렸습니다.');
 		}
-		res.send({
+		res.status(200).send('ok');
+		req.session.user = {
 			name: userByEmail.name,
-			email: userByEmail.email,
-			nick: userByEmail.nick,
-		})
+			email: userByEmail.email
+		};
+		req.session.save();
 	} catch(error) {
 		res.status(500).send({errorMessage: error.message});
 	}

@@ -22,7 +22,7 @@ class Login extends Component {
 
 		try {
 			bodyValidator(body);
-			const result = await Axios.post('http://localhost:4000/users/login', body)
+			await Axios.post('http://localhost:4000/users/login', body, { withCredentials: true })
 			this.props.history.push('/');
 		} catch (catchedError) {
 			const errorMessage = (catchedError.response && catchedError.response.data) 
