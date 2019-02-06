@@ -4,6 +4,10 @@ const { User } = require('../models');
 
 const router = express.Router();
 
+router.get('/info', (req, res) => {
+	res.send({ user: req.session.user });
+});
+
 router.post('/join', async (req, res, next) => {
 	const { name, nick, password, password_confirm, email } = req.body;
 

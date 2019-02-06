@@ -3,6 +3,8 @@ import { Link, withRouter } from 'react-router-dom';
 
 import { Menu, Container } from 'semantic-ui-react'
 
+import Axios from 'axios';
+
 class CustomMenu extends Component {
 	render() {
 		return (
@@ -21,6 +23,25 @@ class NavBar extends Component {
 			name: '',
 			email: ''
 		}
+	}
+
+	fetchUser = () => {
+		Axios.get('http://localhost:4000/users/info', { withCredentials: true })
+			.then((res) => {
+				this.setState({loggedInUser: {
+					name: res.data.user ? res.data.user.name : '',
+					email: res.data.user ? res.data.user.email : '',
+				}})
+			});
+	}
+
+	constructor(props) {
+		super(props);
+		this.fetchUser();
+	}
+
+	componentWillReceiveProps() {
+		this.fetchUser();
 	}
 
 	render() {
