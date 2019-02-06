@@ -5,11 +5,25 @@ var { sequelize } = require('./models');
 
 var app = express();
 
+const session = require('express-session');
+
 var userRouter = require('./routes/user');
 sequelize.sync();
 
-app.use(cors());
+app.use(cors({
+  credentials: true,
+  origin: 'http://localhost:3000'
+}));
 app.use(bodyParser());
+
+app.use(
+  session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+  })
+);
 
 app.use('/users', userRouter);
 

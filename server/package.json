@@ -11,6 +11,7 @@
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "express": "^4.16.4",
+    "express-session": "^1.15.6",
     "mysql2": "^1.6.4",
     "sequelize": "^4.42.0"
   },
