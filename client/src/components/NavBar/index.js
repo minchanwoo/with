@@ -16,9 +16,16 @@ class CustomMenu extends Component {
 }
 
 class NavBar extends Component {
+	state = {
+		loggedInUser: {
+			name: '',
+			email: ''
+		}
+	}
+
 	render() {
 		const pathname = this.props.location.pathname;
-		const menues = (this.props.loggedInUser.email) 
+		const menues = (this.state.loggedInUser.email) 
 			? [ {to: '/', name: 'Home', exact: true}, {to: '/mypage', name: 'MyPage'}, {to: '/logout', name: 'Logout'} ]
 			: [ {to: '/', name: 'Home', exact: true}, {to: '/login', name: 'Login'}, {to: '/join', name: 'Join'} ]
 		return (
@@ -32,8 +39,8 @@ class NavBar extends Component {
 							pathname={pathname} />
 						))}
 					<Menu.Item>
-						{this.props.loggedInUser.name 
-							? `${this.props.loggedInUser.name}님 안녕하세요.` 
+						{this.state.loggedInUser.name 
+							? `${this.state.loggedInUser.name}님 안녕하세요.` 
 							: '회원가입 해주세요.'
 						}
 					</Menu.Item>

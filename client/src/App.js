@@ -16,27 +16,15 @@ import Logout from './pages/Logout';
 const history = createBrowserHistory()
 
 class App extends Component {
-  state = {
-    loggedInUser: {
-      email: '',
-    },
-  };
-
-  setLoggedInUser = (user) => {
-    this.setState({
-      loggedInUser: user
-    })
-  }
-
   render() {
     return (
       <Router history={history}>
         <div>
-          <NavBar loggedInUser={this.state.loggedInUser}/>
+          <NavBar/>
           <div style={{marginTop: '60px'}}>
             <Route path="/" exact component={Home} />
             <Route path="/join" component={Join} />
-            <Route path="/login" component={() => <Login history={history} setLoggedInUser={this.setLoggedInUser}/>} />
+            <Route path="/login" component={Login} />
             <Route path="/mypage" component={MyPage} />
             <Route path="/logout" component={Logout} />
           </div>
