@@ -18,6 +18,16 @@ router.get('/mypage', async (req, res) => {
 	}
 })
 
+router.post('/:id/update', async(req, res) => {
+	await User.update(req.body, { where: { id: req.params.id } });
+	req.session.user = {
+		email: req.body.email,
+		name: req.body.name,
+		id: req.params.id,
+	};
+	req.session.save();
+})
+
 router.post('/join', async (req, res, next) => {
 	const { name, nick, password, password_confirm, email } = req.body;
 

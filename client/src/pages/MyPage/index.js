@@ -9,7 +9,8 @@ class MyPage extends Component {
 	state = {
 		email: '',
 		name: '',
-		nick: ''
+		nick: '',
+		id: 0
 	};
 
 	constructor(props) {
@@ -25,8 +26,25 @@ class MyPage extends Component {
 		this.setState({
 			email: user.email,
 			name: user.name,
-			nick: user.nick
+			nick: user.nick,
+			id: user.id
 		});
+	}
+
+	handleInput = (e) => {
+		this.setState({
+			[e.target.name]: e.target.value
+		})
+	}
+
+	handleSubmit = async (e) => {
+		e.preventDefault();
+		const body = {
+			email: this.state.email,
+			name: this.state.name,
+			nick: this.state.nick
+		};
+		await Axios.post(`http://localhost:4000/users/${this.state.id}/update`, body, { withCredentials: true });
 	}
 
 	render() {
