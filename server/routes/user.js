@@ -42,8 +42,11 @@ router.post('/join', async (req, res, next) => {
 			throw new Error('비밀번호와 비밀번호 확인값이 다릅니다.');
 		}
 	
-		const exUserByEmail = await User.find({ where:{ email: email } });
+		const exUserByEmail = await User.find({ where:{ email: email }, paranoid: false });
 		if (exUserByEmail) {
+			if (exUserByEmail.deletedAt != null) {
+				throw new Error('탈퇴한 회원입니다.');
+			}
 			throw new Error('기존에 가입된 이메일 주소입니다.');
 		}
 
@@ -72,9 +75,12 @@ router.post('/join', async (req, res, next) => {
 router.post('/login', async(req, res) => {
 	const { email, password } = req.body;
 	try {
-		const userByEmail = await User.find({ where: { email: email }});
+		const userByEmail = await User.find({ where: { email: email }, paranoid: false });
 		if (!userByEmail) {
 			throw new Error('사용자가 없습니다.')
+		}
+		if (userByEmail.deletedAt != null) {
+			throw new Error('탈퇴한 사용자입니다.');
 		}
 		const compare = bcrypt.compareSync(password, userByEmail.password);
 		if (!compare) {
