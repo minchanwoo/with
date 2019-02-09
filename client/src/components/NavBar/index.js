@@ -18,42 +18,22 @@ class CustomMenu extends Component {
 }
 
 class NavBar extends Component {
-	state = {
-		loggedInUser: {
-			name: '',
-			email: ''
-		}
-	}
-
- 	fetchUser = async () => {
-		const res = await Axios.get('http://localhost:4000/users/info', { withCredentials: true })
-		this.setState({loggedInUser: {
-			name: res.data.user ? res.data.user.name : '',
-			email: res.data.user ? res.data.user.email : '',
-		}})
-	}
-
-	constructor(props) {
-		super(props);
-		this.fetchUser();
-	}
-
 	async shouldComponentUpdate() {
-		await this.fetchUser();
+		await this.props.fetchUser();
 		return true;
 	}
 
 	confirmLogout = async () => {
 		if (window.confirm('로그아웃 하시겠습니까?')) {
 			await Axios.post('http://localhost:4000/users/logout', {}, { withCredentials: true })
-			await this.fetchUser();
+			await this.props.fetchUser();
 			this.props.history.push('/');
 		}
 	}
 
 	render() {
 		const pathname = this.props.location.pathname;
-		const menues = (this.state.loggedInUser.email) 
+		const menues = (this.props.loggedInUser.email) 
 			? [ {to: '/', name: 'Home' }, {to: '/mypage', name: 'MyPage'} ]
 			: [ {to: '/', name: 'Home' }, {to: '/login', name: 'Login'}, {to: '/join', name: 'Join'} ]
 		return (
@@ -66,10 +46,10 @@ class NavBar extends Component {
 							name={menu.name} 
 							pathname={pathname} />
 						))}
-					{this.state.loggedInUser.name ?
+					{this.props.loggedInUser.name ?
 						[
-							<Menu.Item key={0} onClick={() => this.confirmLogout()}>Logout</Menu.Item>,
-							<Menu.Item key={1}>{this.state.loggedInUser.name}님 안녕하세요</Menu.Item>
+							<Menu.Item key={0} onClick={this.confirmLogout}>Logout</Menu.Item>,
+							<Menu.Item key={1}>{this.props.loggedInUser.name}님 안녕하세요</Menu.Item>
 						]
 						: <Menu.Item>회원가입 해주세요.</Menu.Item>
 					}
