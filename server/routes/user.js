@@ -97,4 +97,10 @@ router.post('/logout', (req, res)=> {
 	res.status(200).send('ok');
 });
 
+router.post('/delete', async(req, res)=> {
+	await User.destroy({ where: {id: req.session.user.id }});
+	req.session.destroy();
+	res.status(200).send('ok');
+});
+
 module.exports = router;

@@ -47,6 +47,15 @@ class MyPage extends Component {
 		await Axios.post(`http://localhost:4000/users/${this.state.id}/update`, body, { withCredentials: true });
 	}
 
+	handleDelete = async (e) => {
+		e.preventDefault();
+		if(window.confirm('정말 탈퇴하시겠습니까?')) {
+			await Axios.post('http://localhost:4000/users/delete', {}, { withCredentials: true });
+			this.props.history.push('/');
+		}
+	}
+		
+
 	render() {
 		return (
 			<div>
@@ -77,7 +86,7 @@ class MyPage extends Component {
 					/>
 					<br/><br/><br/>
 					<Button>수정</Button>
-					<Button>탈퇴</Button>
+					<Button onClick={this.handleDelete}>탈퇴</Button>
 				</form>
 			</div>
 			

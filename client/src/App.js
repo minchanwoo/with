@@ -28,10 +28,21 @@ class App extends Component {
     const fetched_user = (await Axios.get('http://localhost:4000/users/info', { withCredentials: true })).data.user;
 
     if (!fetched_user) {
+      this.setState({
+        loggedInUser: {
+          name: '',
+          email: ''
+        }
+      });
       return;
-    }
+    } else {
+      const email_changed = fetched_user.email === this.state.loggedInUser.email;
+      const name_changed = fetched_user.name === this.state.loggedInUser.name;
 
-    if ((fetched_user.name !== this.state.loggedInUser.name) || (fetched_user.email !== this.state.loggedInUser.email)) {
+      if (email_changed && name_changed) {
+        return;
+      }
+        
       this.setState({
         loggedInUser: {
           name: fetched_user.name,
