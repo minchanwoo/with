@@ -13,6 +13,7 @@ import Home from './pages/Home';
 import Join from './pages/Join';
 import Login from './pages/Login';
 import MyPage from './pages/MyPage';
+import PostCreate from './pages/PostCreate';
 
 const history = createBrowserHistory()
 
@@ -68,7 +69,10 @@ class App extends Component {
           <div style={{marginTop: '60px'}}>
             <Route path="/" exact component={Home} />
             {this.state.loggedInUser.name ? (
-              <Route path="/mypage" component={MyPage} />
+              <div>
+                <Route path="/mypage" component={MyPage} />
+                <Route path="/posts/new" component={PostCreate} />
+              </div>
             ): (
               <div>
                 <Route path="/join" component={Join} />

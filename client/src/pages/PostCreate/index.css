@@ -1,0 +1,25 @@
+.root {
+    display: flex;
+    height: 100vh;
+}
+  
+.textarea {
+    flex: 1;
+    border: 1px solid red;
+    height: 100vh;
+}
+
+.preview {
+    flex: 1;
+    border: 1px solid blue;
+    height: 100vh;
+}
+
+pre > code {
+    color: red;
+}
+.title {
+    float: left;
+}
+
+
