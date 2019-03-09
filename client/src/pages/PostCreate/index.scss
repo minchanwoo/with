@@ -1,0 +1,26 @@
+$main-color: green;
+
+:local .title {
+    float: left;
+}
+
+:local .root {
+    display: flex;
+    height: 100vh;
+
+    & .textarea {
+        flex: 1;
+        border: 1px solid $main-color;
+        height: 100vh;
+    }
+
+    & .preview {
+        flex: 1;
+        border: 1px solid blue;
+        height: 100vh;
+
+        & code {
+            color: $main-color;
+        }
+    }
+}

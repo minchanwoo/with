@@ -8,7 +8,7 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/markdown/markdown';
 
-import './index.css';
+import styles from './index.scss';
 
 class PostEdit extends Component {
 	state = {
@@ -27,14 +27,14 @@ class PostEdit extends Component {
 	render() {
 		return (
 			<div>
-				<div className="title">제목</div>
+				<div className={styles.title}>제목</div>
 				<input type='text' onChange={(e)=> this.setState({ title: e.target.value })} value={this.state.title} />
 				<button onClick={()=> this.onSubmit()}>등록</button>
-				<div className="root">
-					<div className='textarea'>
+				<div className={styles.root}>
+					<div className={styles.textarea}>
 						<CodeMirror value={this.state.text} onChange={(value) => this.setState({ text: value})} />
 					</div>
-					<div className='preview' dangerouslySetInnerHTML={{__html: marked(this.state.text)}}>
+					<div className={styles.preview} dangerouslySetInnerHTML={{__html: marked(this.state.text)}}>
 					</div>
 				</div>
 			</div>
