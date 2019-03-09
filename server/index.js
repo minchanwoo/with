@@ -8,6 +8,8 @@ var app = express();
 const session = require('express-session');
 
 var userRouter = require('./routes/user');
+var postRouter = require('./routes/post');
+
 sequelize.sync();
 
 app.use(cors({
@@ -26,6 +28,7 @@ app.use(
 );
 
 app.use('/users', userRouter);
+app.use('/posts', postRouter);
 
 app.listen(4000, function () {
   console.log('Example app listening on port 4000!');
