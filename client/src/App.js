@@ -14,6 +14,7 @@ import Join from './pages/Join';
 import Login from './pages/Login';
 import MyPage from './pages/MyPage';
 import PostCreate from './pages/PostCreate';
+import PostDetail from './pages/PostDetail';
 
 const history = createBrowserHistory()
 
@@ -79,6 +80,7 @@ class App extends Component {
                 <Route path="/login" component={Login} />
               </div>
             )}
+            <Route path='/posts/:id' component={PostDetail} />
           </div>
         </div>
       </Router>

@@ -16,4 +16,15 @@ router.post('/new', async (req, res) => {
     }
 });
 
+router.get('/:id', async (req, res) => {
+    const post = await Post.find({ where: { id: req.params.id }});
+
+    const user = req.session.user;
+
+    const is_my_post = user
+     ? user.id === post.userId
+     : false;
+    res.send({ post, is_my_post });
+})
+
 module.exports = router;
