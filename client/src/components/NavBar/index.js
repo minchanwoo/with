@@ -33,9 +33,10 @@ class NavBar extends Component {
 
 	render() {
 		const pathname = this.props.location.pathname;
+		const common_menues = [{to: '/', name: 'Home' }, {to: '/posts', name: 'Posts'}]
 		const menues = (this.props.loggedInUser.email) 
-			? [ {to: '/', name: 'Home' }, {to: '/mypage', name: 'MyPage'} ]
-			: [ {to: '/', name: 'Home' }, {to: '/login', name: 'Login'}, {to: '/join', name: 'Join'} ]
+			? common_menues.concat([{to: '/mypage', name: 'MyPage'}])
+			: common_menues.concat([{to: '/login', name: 'Login'}, {to: '/join', name: 'Join'}]);
 		return (
 			<Menu fixed='top' inverted>
 				<Container>

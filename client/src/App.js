@@ -15,6 +15,7 @@ import Login from './pages/Login';
 import MyPage from './pages/MyPage';
 import PostCreate from './pages/PostCreate';
 import PostDetail from './pages/PostDetail';
+import Posts from './pages/Posts';
 
 const history = createBrowserHistory()
 
@@ -81,6 +82,7 @@ class App extends Component {
               </div>
             )}
             <Route path='/posts/:id' component={PostDetail} />
+            <Route exact path='/posts' component={Posts}/>
           </div>
         </div>
       </Router>
