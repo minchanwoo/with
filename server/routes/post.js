@@ -28,7 +28,6 @@ router.get('/:id', async (req, res) => {
 })
 
 router.get('/', async(req, res) => {
-    console.log(req.query);
     const page = Number(req.query.page);
     const items_per_page = Number(req.query.items_per_page);
     const posts = await Post.findAll({
@@ -45,6 +44,16 @@ router.get('/', async(req, res) => {
     const count = await Post.count();
     const total_page = Math.ceil(count / items_per_page);
     res.send({ posts, total_page });
+})
+
+router.delete('/:id', async(req, res) => {
+    const post = await Post.find({ where: { id: req.params.id }});
+    if (req.session.user.id === post.userId) {
+        await Post.destroy({where: {id: req.params.id}});
+        res.send({ id: req.params.id });
+    } else {
+        res.status(500).send({errorMessage: 'not authorized'});
+    }
 })
 
 module.exports = router;
