@@ -3,8 +3,6 @@ const { Post, User } = require('../models');
 
 const router = express.Router();
 
-const POST_PER_PAGE = 2;
-
 router.post('/new', async (req, res) => {
     try {
         const user_created = await Post.create({
@@ -30,7 +28,9 @@ router.get('/:id', async (req, res) => {
 })
 
 router.get('/', async(req, res) => {
+    console.log(req.query);
     const page = Number(req.query.page);
+    const items_per_page = Number(req.query.items_per_page);
     const posts = await Post.findAll({
         order: [
             ['id', 'DESC'],
@@ -39,11 +39,11 @@ router.get('/', async(req, res) => {
             model: User,
             attributes: ['name', 'id']
         }],
-        offset: (page - 1) * POST_PER_PAGE,
-        limit: POST_PER_PAGE,
+        offset: (page - 1) * items_per_page,
+        limit: items_per_page,
     });
     const count = await Post.count();
-    const total_page = Math.ceil(count / POST_PER_PAGE);
+    const total_page = Math.ceil(count / items_per_page);
     res.send({ posts, total_page });
 })
 

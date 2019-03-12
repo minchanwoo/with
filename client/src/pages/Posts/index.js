@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 
 import Axios from 'axios';
 
-import { Pagination, Table, Button } from 'semantic-ui-react'
+import { Pagination, Table, Button, Dropdown } from 'semantic-ui-react'
+
+const ITEMS_PER_PAGE_OPTIONS = ['3', '5', '7', '10'].map((count) => ({ key: count, value: count, text: count+'개씩 보기'}));
 
 class Custom extends Component {
     render() {
@@ -23,25 +25,33 @@ class Posts extends Component {
         posts: [],
         currentPage: 1,
         total_page: 1,
+        items_per_page: 10,
     }
 
     constructor(props) {
         super(props);
-        this.loadInfo(this.state.currentPage);
+        this.loadInfo(this.state.currentPage, this.state.items_per_page);
     }
 
-    loadInfo = async (page) => {
-        const {data: { posts, total_page }} = await Axios.get(`http://localhost:4000/posts?page=${page}`)
+    loadInfo = async (page, items_per_page) => {
+        const {data: { posts, total_page }} = await Axios.get(`http://localhost:4000/posts`, {params: {page, items_per_page}});
         this.setState({
             posts,
             total_page,
-            currentPage: page
+            currentPage: page,
+            items_per_page,
         })
     }
 
     render() {
         return (
             <div style={{ padding: 20 }}>
+                <Dropdown
+                    placeholder='N개씩 보기'
+                    search
+                    selection
+                    options={ITEMS_PER_PAGE_OPTIONS} 
+                    onChange={(e, data) => this.loadInfo(1, data.value)}/>
                 <Table padded>
                     <Table.Header>
                         <Table.Row>
@@ -59,7 +69,7 @@ class Posts extends Component {
                     <Pagination
                         activePage={this.state.currentPage}
                         totalPages={this.state.total_page}
-                        onPageChange={(e, data) => this.loadInfo(data.activePage)} />
+                        onPageChange={(e, data) => this.loadInfo(data.activePage, this.state.items_per_page)} />
                     <Link to='/new_post'><Button primary floated='right'>추가</Button></Link>
                 </div>
             </div>
