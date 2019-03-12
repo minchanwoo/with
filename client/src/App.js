@@ -17,7 +17,7 @@ import PostCreate from './pages/PostCreate';
 import PostDetail from './pages/PostDetail';
 import Posts from './pages/Posts';
 
-const history = createBrowserHistory()
+const history = createBrowserHistory();
 
 class App extends Component {
   state = {
@@ -57,7 +57,9 @@ class App extends Component {
 
 	constructor(props) {
 		super(props);
-		this.fetchUser();
+		history.listen(async (location, action) => {
+      await this.fetchUser();
+    });
   }
   
   render() {
@@ -66,7 +68,6 @@ class App extends Component {
         <div>
           <NavBar 
             loggedInUser={this.state.loggedInUser} 
-            fetchUser={this.fetchUser}
           />
           <div style={{marginTop: '60px'}}>
             <Route path="/" exact component={Home} />

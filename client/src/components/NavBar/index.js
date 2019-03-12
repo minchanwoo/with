@@ -18,10 +18,6 @@ class CustomMenu extends Component {
 }
 
 class NavBar extends Component {
-	async shouldComponentUpdate() {
-		await this.props.fetchUser();
-		return true;
-	}
 
 	confirmLogout = async () => {
 		if (window.confirm('로그아웃 하시겠습니까?')) {
