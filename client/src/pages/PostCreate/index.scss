@@ -1,26 +1,27 @@
 $main-color: green;
 
-:local .title {
-    float: left;
-}
-
 :local .root {
     display: flex;
-    height: 100vh;
+    min-height: 50vh;
+    height: 100%;
 
-    & .textarea {
+    font-size: 30px;
+    line-height: 1.3em;
+
+    & :global(.ReactCodeMirror) {
         flex: 1;
-        border: 1px solid $main-color;
-        height: 100vh;
+        padding: 15px;
+        border: 1px solid black;
+
+        & > :global(.CodeMirror) {
+            height: 100%;
+        }
     }
 
     & .preview {
+        padding: 15px;
         flex: 1;
-        border: 1px solid blue;
-        height: 100vh;
-
-        & code {
-            color: $main-color;
-        }
+        color: white;
+        background-color: black;
     }
 }

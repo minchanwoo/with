@@ -15,8 +15,11 @@ class PostDetail extends Component {
             text: '',
             is_my_post: false,
         };
-
         this.getData();
+    }
+
+    async componentWillReceiveProps() {
+        await this.getData();
     }
 
     getData = async () => {

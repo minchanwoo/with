@@ -73,7 +73,7 @@ class App extends Component {
             {this.state.loggedInUser.name ? (
               <div>
                 <Route path="/mypage" component={MyPage} />
-                <Route path="/posts/new" component={PostCreate} />
+                <Route path="/new_post" component={PostCreate} />
               </div>
             ): (
               <div>

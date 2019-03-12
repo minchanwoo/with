@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import Axios from 'axios';
 
-import { Pagination, Table } from 'semantic-ui-react'
+import { Pagination, Table, Button } from 'semantic-ui-react'
 
 class Custom extends Component {
     render() {
@@ -38,10 +38,10 @@ class Posts extends Component {
             currentPage: page
         })
     }
-    
+
     render() {
         return (
-            <div>
+            <div style={{ padding: 20 }}>
                 <Table padded>
                     <Table.Header>
                         <Table.Row>
@@ -56,10 +56,11 @@ class Posts extends Component {
                     </Table.Body>
                 </Table>
                 <div style={{ textAlign: 'center' }}>
-                <Pagination
-                    activePage={this.state.currentPage}
-                    totalPages={this.state.total_page}
-                    onPageChange={(e, data) => this.loadInfo(data.activePage)} />
+                    <Pagination
+                        activePage={this.state.currentPage}
+                        totalPages={this.state.total_page}
+                        onPageChange={(e, data) => this.loadInfo(data.activePage)} />
+                    <Link to='/new_post'><Button primary floated='right'>추가</Button></Link>
                 </div>
             </div>
         );
