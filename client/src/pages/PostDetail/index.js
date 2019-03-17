@@ -15,12 +15,15 @@ class PostDetail extends Component {
             text: '',
             is_my_post: false,
             openDelete: false,
+            id: 0,
         };
         this.getData();
     }
 
-    async componentWillReceiveProps() {
-        await this.getData();
+    componentDidUpdate(newProps) {
+        if (newProps.match.params.id !== this.state.id) {
+            this.getData();
+        }
     }
 
     getData = async () => {
@@ -28,6 +31,7 @@ class PostDetail extends Component {
         const result = await axios.get(`http://localhost:4000/posts/${id}`, { withCredentials: true });
         
         this.setState({
+            id,
             title: result.data.post.title,
             text: result.data.post.text,
             is_my_post: result.data.is_my_post,
