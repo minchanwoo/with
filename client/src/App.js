@@ -68,6 +68,7 @@ class App extends Component {
         <div>
           <NavBar 
             loggedInUser={this.state.loggedInUser} 
+            fetchUser={this.fetchUser}
           />
           <div style={{marginTop: '60px'}}>
             <Route path="/" exact component={Home} />
@@ -82,7 +83,7 @@ class App extends Component {
                 <Route path="/login" component={Login} />
               </div>
             )}
-            <Route path='/posts/:id' component={PostDetail} />
+            <Route path='/posts/:id' component={(props) => <PostDetail {...props} loggedInUser={this.state.loggedInUser} />} />
             <Route exact path='/posts' component={Posts}/>
           </div>
         </div>

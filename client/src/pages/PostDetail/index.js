@@ -16,9 +16,11 @@ class PostDetail extends Component {
             text: '',
             is_my_post: false,
             openDelete: false,
+            openLogin: false,
             id: 0,
             like_result: '',
             liked_users: [],
+            loggedInUser: props.loggedInUser,
         };
         this.getData();
     }
@@ -84,7 +86,7 @@ class PostDetail extends Component {
     }
 
     render() {
-        const { title, text, is_my_post, like_result } = this.state;
+        const { title, text, is_my_post, like_result, loggedInUser } = this.state;
         return (
             <div className={styles.detail}>
                 <div className={styles.title}>{title}</div>
@@ -102,7 +104,19 @@ class PostDetail extends Component {
                         onConfirm={() => this.postDelete()}
                     />
                 </div>}
-                <Icon name='like' onClick={() => this.like()} style={{cursor: 'pointer'}}/>
+                {loggedInUser && loggedInUser.name
+                    ? <Icon name='like' onClick={() => this.like()} style={{cursor: 'pointer'}}/>
+                    : <Icon name='like' onClick={() => this.setState({ openLogin: true })} style={{cursor: 'pointer'}}/> }
+
+                <Confirm 
+                    open={this.state.openLogin} 
+                    content='로그인 하시겠습니까?'
+                    confirmButton='로그인 창 이동'
+                    cancelButton='취소'
+                    onCancel={() => this.setState({ openLogin: false })}
+                    onConfirm={() => this.props.history.push('/login')}
+                />
+                
                 {this.state.liked_users.map((user, i) => {
                     return <span key={user.id}>
                         <Link to={`/user/${user.id}`}>{user.name}</Link>
