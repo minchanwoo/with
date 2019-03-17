@@ -11,6 +11,8 @@ const Like = require('./like')(sequelize, Sequelize);
 
 Post.belongsTo(User);
 Post.hasMany(Like);
+User.hasMany(Post);
+User.hasMany(Like);
 
 Like.belongsTo(User);
 Like.belongsTo(Post);

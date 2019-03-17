@@ -1,6 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const { User } = require('../models');
+const { User, Post, Like } = require('../models');
 
 const router = express.Router();
 
@@ -10,8 +10,25 @@ router.get('/info', (req, res) => {
 
 router.get('/mypage', async (req, res) => {
 	if (req.session.user && req.session.user.id) {
-		const user = await User.findOne({ where: { id: req.session.user.id } });
-		user.password = undefined;
+		const user = await User.findOne({ 
+			where: { id: req.session.user.id },
+			attributes: ['email', 'name', 'nick', 'id'],
+			include: [{
+				model: Post,
+				attributes: ['id', 'title', 'createdAt']
+			}, {
+				model: Like,
+				attributes: ['id'],
+				include: [{
+					model: Post,
+					attributes: ['id', 'title', 'createdAt'],
+					include: [{
+						model: User,
+						attributes: ['name'],
+					}],
+				}],
+			}],
+		});
 		res.send({ user });
 	} else {
 		res.send({ user: null });

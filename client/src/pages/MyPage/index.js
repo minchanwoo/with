@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
 
-import { Input, Button } from 'semantic-ui-react'
+import { Input, Button, Table } from 'semantic-ui-react'
 
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 class MyPage extends Component {
 	state = {
 		email: '',
 		name: '',
 		nick: '',
-		id: 0
+		id: 0,
+		posts: [],
+		likes: [],
 	};
 
 	constructor(props) {
@@ -19,7 +21,7 @@ class MyPage extends Component {
 	}
 
 	fetchUser = async () => {
-		const user = (await Axios.get('http://localhost:4000/users/mypage', { withCredentials: true })).data.user;
+		const {data: { user }} = (await Axios.get('http://localhost:4000/users/mypage', { withCredentials: true }));
 		if (!user) {
 			this.props.history.push('/login');
 		}
@@ -27,10 +29,11 @@ class MyPage extends Component {
 			email: user.email,
 			name: user.name,
 			nick: user.nick,
-			id: user.id
+			id: user.id,
+			posts: user.posts,
+			likes: user.likes,
 		});
 	}
-
 	handleInput = (e) => {
 		this.setState({
 			[e.target.name]: e.target.value
@@ -88,6 +91,37 @@ class MyPage extends Component {
 					<Button>수정</Button>
 					<Button onClick={this.handleDelete}>탈퇴</Button>
 				</form>
+				<Table celled>
+					<Table.Header>
+						<Table.Row>
+							<Table.HeaderCell colSpan={2}>내가 쓴 글</Table.HeaderCell>
+						</Table.Row>
+					</Table.Header>
+					<Table.Body>
+						{this.state.posts.map((post) => {
+							return <Table.Row key={post.id}>
+								<Table.Cell><Link to={`/posts/${post.id}`} >{post.title}</Link></Table.Cell>
+								<Table.Cell>{post.createdAt}</Table.Cell>
+							</Table.Row>
+						})}
+					</Table.Body>
+				</Table>
+				<Table celled>
+					<Table.Header>
+						<Table.Row>
+							<Table.HeaderCell colSpan={3}>내가 좋아요 글</Table.HeaderCell>
+						</Table.Row>
+					</Table.Header>
+					<Table.Body>
+						{this.state.likes.map((like) => {
+							return <Table.Row key={like.id}>
+								<Table.Cell><Link to={`/posts/${like.post.id}`} >{like.post.title}</Link></Table.Cell>
+								<Table.Cell>{like.post.user.name}</Table.Cell>
+								<Table.Cell>{like.post.createdAt}</Table.Cell>
+							</Table.Row>
+						})}
+					</Table.Body>
+				</Table>
 			</div>
 			
 		);
