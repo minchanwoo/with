@@ -17,7 +17,7 @@ router.post('/new', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-    const post = await Post.find({ where: { id: req.params.id }});
+    const post = await Post.findOne({ where: { id: req.params.id }});
 
     const user = req.session.user;
 
@@ -47,7 +47,7 @@ router.get('/', async(req, res) => {
 })
 
 router.delete('/:id', async(req, res) => {
-    const post = await Post.find({ where: { id: req.params.id }});
+    const post = await Post.findOne({ where: { id: req.params.id }});
     if (req.session.user.id === post.userId) {
         await Post.destroy({where: {id: req.params.id}});
         res.send({ id: req.params.id });

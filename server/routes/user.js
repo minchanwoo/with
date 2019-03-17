@@ -10,7 +10,7 @@ router.get('/info', (req, res) => {
 
 router.get('/mypage', async (req, res) => {
 	if (req.session.user && req.session.user.id) {
-		const user = await User.find({ where: { id: req.session.user.id } });
+		const user = await User.findOne({ where: { id: req.session.user.id } });
 		user.password = undefined;
 		res.send({ user });
 	} else {
@@ -42,7 +42,7 @@ router.post('/join', async (req, res, next) => {
 			throw new Error('비밀번호와 비밀번호 확인값이 다릅니다.');
 		}
 	
-		const exUserByEmail = await User.find({ where:{ email: email }, paranoid: false });
+		const exUserByEmail = await User.findOne({ where:{ email: email }, paranoid: false });
 		if (exUserByEmail) {
 			if (exUserByEmail.deletedAt != null) {
 				throw new Error('탈퇴한 회원입니다.');
@@ -50,12 +50,12 @@ router.post('/join', async (req, res, next) => {
 			throw new Error('기존에 가입된 이메일 주소입니다.');
 		}
 
-		const exUserByName = await User.find({ where:{ name: name } });
+		const exUserByName = await User.findOne({ where:{ name: name } });
 		if (exUserByName) {
 			throw new Error('기존에 가입된 이름입니다.');
 		}
 
-		const exUserByNick = await User.find({ where:{ nick: nick } });
+		const exUserByNick = await User.findOne({ where:{ nick: nick } });
 		if (exUserByNick) {
 			throw new Error('기존에 가입된 닉네임입니다.');
 		}
@@ -75,7 +75,7 @@ router.post('/join', async (req, res, next) => {
 router.post('/login', async(req, res) => {
 	const { email, password } = req.body;
 	try {
-		const userByEmail = await User.find({ where: { email: email }, paranoid: false });
+		const userByEmail = await User.findOne({ where: { email: email }, paranoid: false });
 		if (!userByEmail) {
 			throw new Error('사용자가 없습니다.')
 		}
