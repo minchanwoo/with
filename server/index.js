@@ -9,6 +9,7 @@ const session = require('express-session');
 
 var userRouter = require('./routes/user');
 var postRouter = require('./routes/post');
+var likeRouter = require('./routes/like');
 
 sequelize.sync();
 
@@ -29,6 +30,7 @@ app.use(
 
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
+app.use('/likes', likeRouter);
 
 app.listen(4000, function () {
   console.log('Example app listening on port 4000!');
