@@ -16,6 +16,7 @@ class PostDetail extends Component {
             is_my_post: false,
             openDelete: false,
             id: 0,
+            liked_users: [],
         };
         this.getData();
     }
@@ -29,12 +30,14 @@ class PostDetail extends Component {
     getData = async () => {
         const id = this.props.match.params.id;
         const result = await axios.get(`http://localhost:4000/posts/${id}`, { withCredentials: true });
+        const liked_users = result.data.post.likes.map((like) => like.user);
         
         this.setState({
             id,
             title: result.data.post.title,
             text: result.data.post.text,
             is_my_post: result.data.is_my_post,
+            liked_users,
         })
     }
 
@@ -68,6 +71,12 @@ class PostDetail extends Component {
                         onConfirm={() => this.postDelete()}
                     />
                 </div>}
+                {this.state.liked_users.map((user, i) => {
+                    return <span key={user.id}>
+                        <Link to={`/user/${user.id}`}>{user.name}</Link>
+                        {i !== this.state.liked_users.length - 1 && ', '}
+                    </span>
+                })}
             </div>
         )
     }
