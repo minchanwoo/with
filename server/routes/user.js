@@ -35,12 +35,12 @@ router.get('/mypage', async (req, res) => {
 	}
 })
 
-router.post('/:id/update', async(req, res) => {
-	await User.update(req.body, { where: { id: req.params.id } });
+router.post('/update', async(req, res) => {
+	await User.update(req.body, { where: { id: req.session.user.id } });
 	req.session.user = {
 		email: req.body.email,
 		name: req.body.name,
-		id: req.params.id,
+		id: req.session.user.id,
 	};
 	req.session.save();
 })

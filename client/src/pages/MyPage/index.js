@@ -10,7 +10,6 @@ class MyPage extends Component {
 		email: '',
 		name: '',
 		nick: '',
-		id: 0,
 		posts: [],
 		likes: [],
 	};
@@ -29,7 +28,6 @@ class MyPage extends Component {
 			email: user.email,
 			name: user.name,
 			nick: user.nick,
-			id: user.id,
 			posts: user.posts,
 			likes: user.likes,
 		});
@@ -47,7 +45,7 @@ class MyPage extends Component {
 			name: this.state.name,
 			nick: this.state.nick
 		};
-		await Axios.post(`http://localhost:4000/users/${this.state.id}/update`, body, { withCredentials: true });
+		await Axios.post(`http://localhost:4000/users/update`, body, { withCredentials: true });
 	}
 
 	handleDelete = async (e) => {
