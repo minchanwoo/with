@@ -47,6 +47,16 @@ router.get('/:id', async (req, res) => {
     res.send({ post, is_my_post });
 })
 
+router.post('/:postId/comments', async (req, res) => {
+    const result = await Comment.create({
+        postId: req.params.postId,
+        userId: req.session.user.id,
+        text: req.body.text,
+    });
+    console.log('REUSLT!!', result);
+    res.send({ result, user_name: req.session.user.name });
+})
+
 router.get('/', async(req, res) => {
     const page = Number(req.query.page);
     const items_per_page = Number(req.query.items_per_page);

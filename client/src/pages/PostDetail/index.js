@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import dateFns from 'date-fns';
 
 import styles from './index.scss';
+import Axios from 'axios';
 
 class PostDetail extends Component {
     constructor(props) {
@@ -90,6 +91,28 @@ class PostDetail extends Component {
         }
     }
 
+    onInputComment = async (e) => {
+        const target = e.target;
+        if (e.key === 'Enter') {
+            console.log('ENTER!!', e.target.value);
+            const result = await Axios.post(`http://localhost:4000/posts/${this.state.id}/comments`, { text: e.target.value }, { withCredentials: true});
+            const new_comment = {
+                id: result.data.result.id,
+                user: {
+                    name: result.data.user_name,
+                },
+                createdAt: result.data.result.createdAt,
+                text: result.data.result.text,
+            };
+            const comments = this.state.comments;
+            comments.push(new_comment);
+            this.setState({
+                comments,
+            });
+            target.value = '';
+        }
+    }
+
     render() {
         const { title, text, is_my_post, like_result, loggedInUser } = this.state;
         return (
@@ -142,6 +165,9 @@ class PostDetail extends Component {
                             </Comment.Content>
                         </Comment>;
                     })}
+                    <Form reply>
+                        <Form.Input onKeyPress={(e) => this.onInputComment(e)} />
+                    </Form>
 
                 </Comment.Group>
             </div>
