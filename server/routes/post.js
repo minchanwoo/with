@@ -1,5 +1,5 @@
 const express = require('express');
-const { Post, User, Like } = require('../models');
+const { Post, User, Like, Comment } = require('../models');
 
 const router = express.Router();
 
@@ -19,14 +19,24 @@ router.post('/new', async (req, res) => {
 router.get('/:id', async (req, res) => {
     const post = await Post.findOne({ 
         where: { id: req.params.id },
-        include: [{
-            model: Like,
-            attributes: ['id'],
-            include: [{
-                model: User,
-                attributes: ['id', 'name'],
-            }],
-        }],
+        include: [
+            {
+                model: Like,
+                attributes: ['id'],
+                include: [{
+                    model: User,
+                    attributes: ['id', 'name'],
+                }],
+            },
+            {
+                model: Comment,
+                attributes: ['id', 'text', 'createdAt'],
+                include: [{
+                    model: User,
+                    attributes: ['id', 'name'],
+                }],
+            },
+        ],
     });
 
     const user = req.session.user;

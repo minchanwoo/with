@@ -3,8 +3,10 @@ import axios from 'axios';
 
 import marked from 'marked';
 
-import { Button, Confirm, Message, Icon } from 'semantic-ui-react'
+import { Button, Confirm, Message, Icon, Comment, Form } from 'semantic-ui-react'
 import { Link } from 'react-router-dom';
+
+import dateFns from 'date-fns';
 
 import styles from './index.scss';
 
@@ -20,6 +22,7 @@ class PostDetail extends Component {
             id: 0,
             like_result: '',
             liked_users: [],
+            comments: [],
             loggedInUser: props.loggedInUser,
         };
         this.getData();
@@ -34,6 +37,7 @@ class PostDetail extends Component {
     getData = async () => {
         const id = this.props.match.params.id;
         const result = await axios.get(`http://localhost:4000/posts/${id}`, { withCredentials: true });
+        const comments = result.data.post.comments;
         const liked_users = result.data.post.likes.map((like) => like.user);
         
         this.setState({
@@ -42,6 +46,7 @@ class PostDetail extends Component {
             text: result.data.post.text,
             is_my_post: result.data.is_my_post,
             liked_users,
+            comments,
         })
     }
 
@@ -124,6 +129,21 @@ class PostDetail extends Component {
                     </span>
                 })}
                 {like_result && <Message info><p>{like_result}</p></Message>}
+
+                <Comment.Group>
+                    {this.state.comments.map((comment) => {
+                        return <Comment key={comment.id}>
+                            <Comment.Content>
+                                <Comment.Author as='a'>{comment.user.name}</Comment.Author>
+                                <Comment.Metadata>
+                                    <div>{dateFns.format(comment.createdAt, 'YY/MM/DD hh:mm a')}</div>
+                                </Comment.Metadata>
+                                <Comment.Text>{comment.text}</Comment.Text>
+                            </Comment.Content>
+                        </Comment>;
+                    })}
+
+                </Comment.Group>
             </div>
         )
     }
