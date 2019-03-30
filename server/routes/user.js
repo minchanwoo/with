@@ -1,6 +1,24 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const { User, Post, Like } = require('../models');
+const aws = require('aws-sdk')
+const multer  = require('multer')
+const multerS3 = require('multer-s3')
+
+const s3 = new aws.S3({
+	region: 'ap-northeast-2',
+})
+
+const upload = multer({
+	storage: multerS3({
+		s3,
+		bucket: 'minchanwoo-with',
+		acl: 'public-read',
+		key: function (req, file, cb) {
+			cb(null, `${Date.now()}_${file.originalname}`)
+		}
+	})
+})
 
 const router = express.Router();
 
@@ -35,14 +53,20 @@ router.get('/mypage', async (req, res) => {
 	}
 })
 
-router.post('/update', async(req, res) => {
-	await User.update(req.body, { where: { id: req.session.user.id } });
+router.post('/update', upload.single('profile'), async(req, res) => {
+	const profile = req.file.location;
+	const body = {
+		...req.body,
+		profile
+	};
+	await User.update(body, { where: { id: req.session.user.id } });
 	req.session.user = {
 		email: req.body.email,
 		name: req.body.name,
 		id: req.session.user.id,
 	};
 	req.session.save();
+	res.send(body);
 })
 
 router.post('/join', async (req, res, next) => {

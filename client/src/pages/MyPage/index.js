@@ -12,6 +12,8 @@ class MyPage extends Component {
 		nick: '',
 		posts: [],
 		likes: [],
+		profile_file: undefined,
+		profile_image: '',
 	};
 
 	constructor(props) {
@@ -38,14 +40,23 @@ class MyPage extends Component {
 		})
 	}
 
+	onUpload = (e) => {
+		this.setState({
+			profile_file: e.target.files[0]
+		})
+	}
+
 	handleSubmit = async (e) => {
 		e.preventDefault();
-		const body = {
-			email: this.state.email,
-			name: this.state.name,
-			nick: this.state.nick
-		};
-		await Axios.post(`http://localhost:4000/users/update`, body, { withCredentials: true });
+		const formData = new FormData();
+		formData.append('email', this.state.email);
+		formData.append('name', this.state.name);
+		formData.append('nick', this.state.nick);
+		formData.append('profile', this.state.profile_file);
+		const result = await Axios.post(`http://localhost:4000/users/update`, formData, { withCredentials: true });
+		this.setState({
+			profile_image: result.data.profile,
+		});
 	}
 
 	handleDelete = async (e) => {
@@ -61,7 +72,8 @@ class MyPage extends Component {
 		return (
 			<div>
 				<h2>MyPage</h2>
-				<form onSubmit={this.handleSubmit}>
+				<form onSubmit={this.handleSubmit} encType="multipart/form-data">
+					<input type="file" onChange={this.onUpload}/>
 					<Input
 						type='text'
 						name='email'
@@ -89,6 +101,7 @@ class MyPage extends Component {
 					<Button>수정</Button>
 					<Button onClick={this.handleDelete}>탈퇴</Button>
 				</form>
+				<img src={this.state.profile_image} alt='프로필 이미지' width={100} height={100}/>
 				<Table celled>
 					<Table.Header>
 						<Table.Row>

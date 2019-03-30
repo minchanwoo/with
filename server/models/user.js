@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 			defaultValue: 'local',
 		},
+		profile: DataTypes.STRING(100)
 	}, {
 		timestamps: true,
 		paranoid: true,
