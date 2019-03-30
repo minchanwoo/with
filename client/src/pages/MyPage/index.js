@@ -32,6 +32,7 @@ class MyPage extends Component {
 			nick: user.nick,
 			posts: user.posts,
 			likes: user.likes,
+			profile_image: user.profile,
 		});
 	}
 	handleInput = (e) => {

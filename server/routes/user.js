@@ -30,7 +30,7 @@ router.get('/mypage', async (req, res) => {
 	if (req.session.user && req.session.user.id) {
 		const user = await User.findOne({ 
 			where: { id: req.session.user.id },
-			attributes: ['email', 'name', 'nick', 'id'],
+			attributes: ['email', 'name', 'nick', 'id', 'profile'],
 			include: [{
 				model: Post,
 				attributes: ['id', 'title', 'createdAt']
