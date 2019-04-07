@@ -73,7 +73,7 @@ class MyPage extends Component {
 		return (
 			<div>
 				<h2>MyPage</h2>
-				<form onSubmit={this.handleSubmit} encType="multipart/form-data">
+				<form onSubmit={this.handleSubmit}>
 					<input type="file" onChange={this.onUpload}/>
 					<Input
 						type='text'

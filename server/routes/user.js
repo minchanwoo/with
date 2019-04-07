@@ -15,7 +15,7 @@ const upload = multer({
 		bucket: 'minchanwoo-with',
 		acl: 'public-read',
 		key: function (req, file, cb) {
-			cb(null, `${Date.now()}_${file.originalname}`)
+			cb(null, `profile/${Date.now()}_${file.originalname}`)
 		}
 	})
 })

@@ -41,6 +41,14 @@ class PostEdit extends Component {
 						text: this.editor.getHtml()
 					});
 				}
+			},
+			hooks: {
+				addImageBlobHook: async(blob, callback) => {
+					const form = new FormData();
+					form.append('image', blob);
+					const result = await axios.post('http://localhost:4000/posts/image_upload', form);
+					callback(result.data.image_url);
+				}
 			}
 		});
 	}

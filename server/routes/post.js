@@ -3,6 +3,25 @@ const { Post, User, Like, Comment } = require('../models');
 
 const router = express.Router();
 
+const aws = require('aws-sdk')
+const multer  = require('multer')
+const multerS3 = require('multer-s3')
+
+const s3 = new aws.S3({
+	region: 'ap-northeast-2',
+})
+
+const upload = multer({
+	storage: multerS3({
+		s3,
+		bucket: 'minchanwoo-with',
+		acl: 'public-read',
+		key: function (req, file, cb) {
+			cb(null, `post/${Date.now()}_${file.originalname}`)
+		}
+	})
+})
+
 router.post('/new', async (req, res) => {
     try {
         const user_created = await Post.create({
@@ -85,5 +104,9 @@ router.delete('/:id', async(req, res) => {
         res.status(500).send({errorMessage: 'not authorized'});
     }
 })
+
+router.post('/image_upload', upload.single('image'), async(req, res) => {
+    res.send({image_url: req.file.location});
+});
 
 module.exports = router;
