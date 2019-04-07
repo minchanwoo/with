@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 
-import marked from 'marked';
-import CodeMirror from 'react-codemirror';
 import axios from 'axios';
 
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/mode/javascript/javascript';
-import 'codemirror/mode/markdown/markdown';
-
-import styles from './index.scss';
-
 import { Input, Button } from 'semantic-ui-react'
+
+import Editor from 'tui-editor';
+import 'tui-editor/dist/tui-editor-extColorSyntax';
+
+import 'codemirror/lib/codemirror.css';
+import 'tui-editor/dist/tui-editor.css';
+import 'tui-editor/dist/tui-editor-contents.css';
+import 'highlight.js/styles/github.css';
 
 class PostEdit extends Component {
 	state = {
@@ -26,6 +26,24 @@ class PostEdit extends Component {
 		const { data: { id } } = await axios.post('http://localhost:4000/posts/new', haha, { withCredentials: true })
 		this.props.history.push(`/posts/${id}`);
 	}
+
+	componentDidMount() {
+		this.editor = new Editor({
+			el: document.querySelector('#editor'),
+			initialEditType: 'wysiwyg',
+			previewStyle: 'vertical',
+			hideModeSwitch: true,
+			exts: ['colorSyntax'],
+			height: '300px',
+			events: {
+				change: (e) => {
+					this.setState({
+						text: this.editor.getHtml()
+					});
+				}
+			}
+		});
+	}
 	
 	render() {
 		return (
@@ -37,10 +55,7 @@ class PostEdit extends Component {
 					placeholder='제목을 입력해주세요'
 				/>
 				<Button onClick={()=> this.onSubmit()} color='teal'>등록</Button>
-				<div className={styles.root}>
-					<CodeMirror value={this.state.text} onChange={(value) => this.setState({ text: value})} />
-					<div className={styles.preview} dangerouslySetInnerHTML={{__html: (marked(this.state.text))}} />
-				</div>
+				<div id='editor' />
 			</div>
 		);
 	}

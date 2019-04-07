@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 
-import marked from 'marked';
-
 import { Button, Confirm, Message, Icon, Comment, Form } from 'semantic-ui-react'
 import { Link } from 'react-router-dom';
 
@@ -10,6 +8,8 @@ import dateFns from 'date-fns';
 
 import styles from './index.scss';
 import Axios from 'axios';
+
+import Viewer from 'tui-editor/dist/tui-editor-Viewer';
 
 class PostDetail extends Component {
     constructor(props) {
@@ -26,6 +26,7 @@ class PostDetail extends Component {
             comments: [],
             loggedInUser: props.loggedInUser,
         };
+
         this.getData();
     }
 
@@ -48,6 +49,12 @@ class PostDetail extends Component {
             is_my_post: result.data.is_my_post,
             liked_users,
             comments,
+        })
+
+        new Viewer({
+            el: document.querySelector('#viewer'),
+            height: '300px',
+            initialValue: this.state.text,
         })
     }
 
@@ -114,11 +121,11 @@ class PostDetail extends Component {
     }
 
     render() {
-        const { title, text, is_my_post, like_result, loggedInUser } = this.state;
+        const { title, is_my_post, like_result, loggedInUser } = this.state;
         return (
             <div className={styles.detail}>
                 <div className={styles.title}>{title}</div>
-                <div className={styles.body} dangerouslySetInnerHTML={{__html: marked(text)}} />
+                <div id='viewer' />
 
                 {is_my_post && <div className={styles.buttons}>
                     <Button>수정</Button>

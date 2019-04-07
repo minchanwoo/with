@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Router, Route } from 'react-router-dom';
 
-import createBrowserHistory from "history/createBrowserHistory";
+import {createBrowserHistory} from "history";
 
 import 'semantic-ui-css/semantic.min.css'
 
