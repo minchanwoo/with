@@ -3,6 +3,8 @@ const { Post, User, Like, Comment } = require('../models');
 
 const router = express.Router();
 
+const { Op } = require('sequelize');
+
 const aws = require('aws-sdk')
 const multer  = require('multer')
 const multerS3 = require('multer-s3')
@@ -85,14 +87,13 @@ router.post('/:postId/comments', async (req, res) => {
         userId: req.session.user.id,
         text: req.body.text,
     });
-    console.log('REUSLT!!', result);
     res.send({ result, user_name: req.session.user.name });
 })
 
 router.get('/', async(req, res) => {
     const page = Number(req.query.page);
     const items_per_page = Number(req.query.items_per_page);
-    const posts = await Post.findAll({
+    const condition = {
         order: [
             ['id', 'DESC'],
         ],
@@ -102,7 +103,15 @@ router.get('/', async(req, res) => {
         }],
         offset: (page - 1) * items_per_page,
         limit: items_per_page,
-    });
+    };
+    if (req.query.keyword) {
+        condition.where = {
+            title: {
+                [Op.like]: `%${req.query.keyword}%`,
+            },
+        };
+    }
+    const posts = await Post.findAll(condition);
     const count = await Post.count();
     const total_page = Math.ceil(count / items_per_page);
     res.send({ posts, total_page });

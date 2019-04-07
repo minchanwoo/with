@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import Axios from 'axios';
 
-import { Pagination, Table, Button, Dropdown } from 'semantic-ui-react'
+import { Pagination, Table, Button, Dropdown, Input, Icon } from 'semantic-ui-react'
 
 const ITEMS_PER_PAGE_OPTIONS = ['3', '5', '7', '10'].map((count) => ({ key: count, value: count, text: count+'개씩 보기'}));
 
@@ -26,6 +26,7 @@ class Posts extends Component {
         currentPage: 1,
         total_page: 1,
         items_per_page: 10,
+        search_keyword: '',
     }
 
     constructor(props) {
@@ -34,13 +35,19 @@ class Posts extends Component {
     }
 
     loadInfo = async (page, items_per_page) => {
-        const {data: { posts, total_page }} = await Axios.get(`http://localhost:4000/posts`, {params: {page, items_per_page}});
+        const params = { page, items_per_page };
+        if (this.state.search_keyword) {
+            params.keyword = this.state.search_keyword;
+        }
+        const { data: { posts, total_page }} = await Axios.get(`http://localhost:4000/posts`, {params});
         this.setState({
             posts,
             total_page,
             currentPage: page,
             items_per_page,
         })
+
+        
     }
 
     render() {
@@ -72,6 +79,9 @@ class Posts extends Component {
                         onPageChange={(e, data) => this.loadInfo(data.activePage, this.state.items_per_page)} />
                     <Link to='/new_post'><Button primary floated='right'>추가</Button></Link>
                 </div>
+
+                <Input value={this.state.search_keyword} onChange={(e) => this.setState({ search_keyword: e.target.value })}/>
+                <Icon name='search' onClick={() => this.loadInfo(1, this.state.items_per_page)}/>
             </div>
         );
     }
