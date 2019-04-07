@@ -15,23 +15,44 @@ import 'highlight.js/styles/github.css';
 class PostEdit extends Component {
 	state = {
 		text: '',
-		title: ''
+		title: '',
+		id: 'new',
+	}
+
+	constructor(props) {
+		super(props);
+		if (props.match && props.match.params.id) {
+			this.setState({
+				id: props.match.params.id,
+			})
+			this.loadData(props.match.params.id);
+		}
+	}
+
+	async loadData(id) {
+		const result = await axios.get(`http://localhost:4000/posts/${id}?simple=true`);
+		this.setState({
+			text: result.data.post.text,
+			title: result.data.post.title,
+		});
+		this.setEditor(this.state.text);
 	}
 
 	onSubmit = async () => {
-		const haha = {
+		const body = {
 			title: this.state.title,
 			text: this.state.text
 		}
-		const { data: { id } } = await axios.post('http://localhost:4000/posts/new', haha, { withCredentials: true })
+		const { data: { id } } = await axios.post(`http://localhost:4000/posts/${this.state.id}`, body, { withCredentials: true })
 		this.props.history.push(`/posts/${id}`);
 	}
 
-	componentDidMount() {
+	setEditor = (value) => {
 		this.editor = new Editor({
 			el: document.querySelector('#editor'),
 			initialEditType: 'wysiwyg',
 			previewStyle: 'vertical',
+			initialValue: value,
 			hideModeSwitch: true,
 			exts: ['colorSyntax'],
 			height: '300px',
@@ -51,6 +72,10 @@ class PostEdit extends Component {
 				}
 			}
 		});
+	}
+
+	componentDidMount() {
+		this.setEditor();
 	}
 	
 	render() {

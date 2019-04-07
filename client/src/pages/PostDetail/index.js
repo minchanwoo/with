@@ -128,7 +128,7 @@ class PostDetail extends Component {
                 <div id='viewer' />
 
                 {is_my_post && <div className={styles.buttons}>
-                    <Button>수정</Button>
+                    <Button onClick={() => this.props.history.push(`/post/${this.state.id}/edit`)}>수정</Button>
                     <Button onClick={() => this.setState({ openDelete: true })}>삭제</Button>
                     <Confirm 
                         open={this.state.openDelete} 

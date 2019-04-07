@@ -22,20 +22,33 @@ const upload = multer({
 	})
 })
 
-router.post('/new', async (req, res) => {
-    try {
+router.post('/image_upload', upload.single('image'), async(req, res) => {
+    res.send({image_url: req.file.location});
+});
+
+router.post('/:id', async (req, res) => {
+    if (req.params.id === 'new') {
         const user_created = await Post.create({
             userId: req.session.user.id,
             title: req.body.title,
             text: req.body.text,
         })
         res.send({ id: user_created.id });
-    } catch (e)  {
-        console.log(e);
+    } else {
+        await Post.update(req.body, { id: req.params.id });
+        res.send('ok');
     }
 });
 
 router.get('/:id', async (req, res) => {
+    if (req.query.simple === 'true') {
+        const post = await Post.findOne({
+            where: { id: req.params.id },
+            attributes: ['text', 'title']
+        });
+        res.send({ post });
+        return;
+    }
     const post = await Post.findOne({ 
         where: { id: req.params.id },
         include: [
@@ -104,9 +117,5 @@ router.delete('/:id', async(req, res) => {
         res.status(500).send({errorMessage: 'not authorized'});
     }
 })
-
-router.post('/image_upload', upload.single('image'), async(req, res) => {
-    res.send({image_url: req.file.location});
-});
 
 module.exports = router;

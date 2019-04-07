@@ -76,6 +76,7 @@ class App extends Component {
               <div>
                 <Route path="/mypage" component={MyPage} />
                 <Route path="/new_post" component={PostCreate} />
+                <Route path='/post/:id/edit' component={PostCreate} />
               </div>
             ): (
               <div>
