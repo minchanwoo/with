@@ -104,12 +104,55 @@ router.get('/', async(req, res) => {
         offset: (page - 1) * items_per_page,
         limit: items_per_page,
     };
-    if (req.query.keyword) {
-        condition.where = {
-            title: {
-                [Op.like]: `%${req.query.keyword}%`,
-            },
-        };
+    
+    const { search_keyword, search_condition } = req.query;
+
+    if (search_keyword) {
+        if (search_condition === 'title') {
+            condition.where = {
+                title: {
+                    [Op.like]: `%${search_keyword}%`,
+                },
+            };
+        } else if (search_condition === 'text') {
+            condition.where = {
+                text: {
+                    [Op.like]: `%${search_keyword}%`,
+                },
+            };
+        } else if (search_condition === 'titletext') {
+            condition.where = {
+                [Op.or]: [
+                    {
+                        title: {
+                            [Op.like]: `%${search_keyword}%`,
+                        }
+                    },
+                    {
+                        text: {
+                            [Op.like]: `%${search_keyword}%`,
+                        }
+                    },
+                ]
+            }
+        } else if (search_condition === 'username') {
+            const users = await User.findAll({
+                where: {
+                    name: {
+                        [Op.like]: `%${search_keyword}%`,
+                    },
+                },
+                attributes: ['id'],
+            });
+
+            const user_ids = users.map((user) => user.id);
+
+            condition.where = {
+                userId: {
+                    [Op.or]: user_ids,
+                },
+            };
+        }
     }
     const posts = await Post.findAll(condition);
     const count = await Post.count();
