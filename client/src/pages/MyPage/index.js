@@ -53,11 +53,16 @@ class MyPage extends Component {
 		formData.append('email', this.state.email);
 		formData.append('name', this.state.name);
 		formData.append('nick', this.state.nick);
-		formData.append('profile', this.state.profile_file);
+		const profile_updated = this.state.profile_file;
+		if (profile_updated) {
+			formData.append('profile', this.state.profile_file);
+		}
 		const result = await Axios.post(`http://localhost:4000/users/update`, formData, { withCredentials: true });
-		this.setState({
-			profile_image: result.data.profile,
-		});
+		if (profile_updated) {
+			this.setState({
+				profile_image: result.data.profile,
+			});
+		}
 	}
 
 	handleDelete = async (e) => {
