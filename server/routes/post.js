@@ -101,8 +101,6 @@ router.get('/', async(req, res) => {
             model: User,
             attributes: ['name', 'id']
         }],
-        offset: (page - 1) * items_per_page,
-        limit: items_per_page,
     };
     
     const { search_keyword, search_condition } = req.query;
@@ -154,8 +152,13 @@ router.get('/', async(req, res) => {
             };
         }
     }
-    const posts = await Post.findAll(condition);
-    const count = await Post.count();
+    const list_condition = {
+        ...condition,
+        offset: (page - 1) * items_per_page,
+        limit: items_per_page,
+    };
+    const posts = await Post.findAll(list_condition);
+    const count = await Post.count(condition);
     const total_page = Math.ceil(count / items_per_page);
     res.send({ posts, total_page });
 })
