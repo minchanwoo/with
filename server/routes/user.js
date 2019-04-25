@@ -54,11 +54,10 @@ router.get('/mypage', async (req, res) => {
 })
 
 router.post('/update', upload.single('profile'), async(req, res) => {
-	const profile = req.file.location;
-	const body = {
-		...req.body,
-		profile
-	};
+	const body = req.body;
+	if (req.file) {
+		body.profile = req.file.location;
+	}
 	await User.update(body, { where: { id: req.session.user.id } });
 	req.session.user = {
 		email: req.body.email,
