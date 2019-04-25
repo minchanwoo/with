@@ -37,8 +37,8 @@ router.post('/:id', async (req, res) => {
         })
         res.send({ id: user_created.id });
     } else {
-        await Post.update(req.body, { id: req.params.id });
-        res.send('ok');
+        await Post.update(req.body, { where: { id: req.params.id } });
+        res.send({ id: req.params.id });
     }
 });
 

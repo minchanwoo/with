@@ -13,18 +13,14 @@ import 'tui-editor/dist/tui-editor-contents.css';
 import 'highlight.js/styles/github.css';
 
 class PostEdit extends Component {
-	state = {
-		text: '',
-		title: '',
-		id: 'new',
-	}
-
 	constructor(props) {
 		super(props);
+		this.state = {
+			text: '',
+			title: '',
+			id: 'new',
+		};
 		if (props.match && props.match.params.id) {
-			this.setState({
-				id: props.match.params.id,
-			})
 			this.loadData(props.match.params.id);
 		}
 	}
@@ -32,6 +28,7 @@ class PostEdit extends Component {
 	async loadData(id) {
 		const result = await axios.get(`http://localhost:4000/posts/${id}?simple=true`);
 		this.setState({
+			id,
 			text: result.data.post.text,
 			title: result.data.post.title,
 		});
